@@ -1,0 +1,8 @@
+[
+	{
+		"tracked": "ansible",
+		"my_repo": "container-ansible",
+		"my_version": "https://raw.githubusercontent.com/johnsondnz/container-ansible/master/VERSION",
+		"github_url": "git@github.com:johnsondnz/container-ansible.git"
+	}
+]

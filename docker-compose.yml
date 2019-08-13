@@ -1,0 +1,10 @@
+---
+version: "3.2"
+services:
+
+  pypi-app:
+    build: .
+    image: johnsondnz/pypi-app:latest
+    container_name: pypi-app
+    volumes:
+      - ~/.ssh/id_rsa:/home/generic/.ssh/id_rsa:ro
