@@ -1,3 +1,5 @@
+[![pipeline status](https://gitlab.com/johnsondnz/pypi-monitor/badges/master/pipeline.svg)](https://gitlab.com/johnsondnz/pypi-monitor/commits/master)
+
 # Pypi-monitor
 Monitors configured repositorys for changes in versions.
 
