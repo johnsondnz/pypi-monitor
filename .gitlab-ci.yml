@@ -1,0 +1,82 @@
+# Referece: https://blog.callr.tech/building-docker-images-with-gitlab-ci-best-practices/
+image: docker:19
+
+variables:
+  CI_REGISTRY: docker.io
+  CI_REGISTRY_IMAGE: index.docker.io/johnsondnz/pypi-monitor
+  CI_PROJECT_URL: https://gitlab.com/johnsondnz/pypi-monitor.git
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+
+# Use this if your GitLab runner does not use socket binding
+services:
+  - docker:dind
+
+
+before_script:
+  - docker info
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  
+
+stages:
+  - build
+  - test
+  - push
+
+
+Build:
+  stage: build
+  script:
+    # use the ./VERSION file as the version number
+    - export VERSION=$(cat VERSION)
+
+    # fetches the latest image (not failing if image is not found)
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    
+    # builds the project, passing vcs variabless for LABEL
+    # notice the cache-from, which is going to use the image we just pulled locally
+    # the built image is tagged locally with the commit SHA, and then pushed to 
+    # the GitLab registry
+    - >
+      docker build
+      --pull
+      --build-arg VCS_REF=$CI_COMMIT_SHA
+      --build-arg VCS_URL=$CI_PROJECT_URL
+      --cache-from $CI_REGISTRY_IMAGE:latest
+      --tag $CI_REGISTRY_IMAGE:$VERSION
+      .
+    - docker push $CI_REGISTRY_IMAGE:$VERSION
+
+
+Test latest:
+  stage: test
+  script:
+    # use the ./VERSION file as the version number
+    - export VERSION=$(cat VERSION)
+
+    # pull the latest version
+    - docker pull $CI_REGISTRY_IMAGE:$VERSION
+    - docker run --rm $CI_REGISTRY_IMAGE:$VERSION
+
+
+# Here, the goal is to tag the "master" branch as "latest"
+Push latest:
+  stage: push
+  only:
+    # Only "master" should be tagged "latest"
+    - master
+  script:
+    # use the ./VERSION file as the version number
+    - export VERSION=$(cat VERSION)
+
+    # Because we have no guarantee that this job will be picked up by the same runner 
+    # that built the image in the previous step, we pull it again locally
+    - docker pull $CI_REGISTRY_IMAGE:$VERSION
+
+    # Then we tag it "latest"
+    - docker tag $CI_REGISTRY_IMAGE:$VERSION $CI_REGISTRY_IMAGE:latest
+    
+    # And we push it with the ANSIBLE_VERSION tag
+    - docker push $CI_REGISTRY_IMAGE:latest
+
