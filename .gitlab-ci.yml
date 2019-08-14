@@ -58,6 +58,7 @@ Build:
 
 Test latest:
   stage: test
+  only:
     changes:
       - Dockerfile
       - VERSION
@@ -76,6 +77,7 @@ Test latest:
 # Here, the goal is to tag the "master" branch as "latest"
 Push latest:
   stage: push
+  only:
     changes:
       - Dockerfile
       - VERSION
