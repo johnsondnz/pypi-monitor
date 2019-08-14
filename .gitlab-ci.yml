@@ -27,6 +27,13 @@ stages:
 
 Build:
   stage: build
+  only:
+    changes:
+      - Dockerfile
+      - VERSION
+      - entrypoint.sh
+      - requirements.txt
+      - "app/*"
   script:
     # use the ./VERSION file as the version number
     - export VERSION=$(cat VERSION)
@@ -51,6 +58,12 @@ Build:
 
 Test latest:
   stage: test
+    changes:
+      - Dockerfile
+      - VERSION
+      - entrypoint.sh
+      - requirements.txt
+      - "app/*"
   script:
     # use the ./VERSION file as the version number
     - export VERSION=$(cat VERSION)
@@ -63,6 +76,12 @@ Test latest:
 # Here, the goal is to tag the "master" branch as "latest"
 Push latest:
   stage: push
+    changes:
+      - Dockerfile
+      - VERSION
+      - entrypoint.sh
+      - requirements.txt
+      - "app/*"
   only:
     # Only "master" should be tagged "latest"
     - master
