@@ -25,8 +25,7 @@ stages:
   - push
 
 
-Build:
-  stage: build
+.template: &job_template
   only:
     changes:
       - Dockerfile
@@ -34,6 +33,11 @@ Build:
       - entrypoint.sh
       - requirements.txt
       - "app/*"
+      - .gitlab-ci.yml
+
+
+build:latest:
+  stage: build
   script:
     # use the ./VERSION file as the version number
     - export VERSION=$(cat VERSION)
@@ -56,34 +60,21 @@ Build:
     - docker push $CI_REGISTRY_IMAGE:$VERSION
 
 
-Test latest:
+test:latest:
+  <<: *job_template
   stage: test
-  only:
-    changes:
-      - Dockerfile
-      - VERSION
-      - entrypoint.sh
-      - requirements.txt
-      - "app/*"
   script:
     # use the ./VERSION file as the version number
     - export VERSION=$(cat VERSION)
 
     # pull the latest version
     - docker pull $CI_REGISTRY_IMAGE:$VERSION
-    - docker run --rm $CI_REGISTRY_IMAGE:$VERSION
+    - docker run --rm $CI_REGISTRY_IMAGE:$VERSION --version
 
 
 # Here, the goal is to tag the "master" branch as "latest"
-Push latest:
+push:latest:
   stage: push
-  only:
-    changes:
-      - Dockerfile
-      - VERSION
-      - entrypoint.sh
-      - requirements.txt
-      - "app/*"
   only:
     # Only "master" should be tagged "latest"
     - master

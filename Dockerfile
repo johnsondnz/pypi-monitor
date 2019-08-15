@@ -31,4 +31,6 @@ RUN set -x && \
     chown -R generic:generic $INSTALL_PATH
 
 USER generic
-ENTRYPOINT ["python", "app.py"]
+COPY VERSION /VERSION
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
