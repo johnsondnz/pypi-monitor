@@ -37,6 +37,7 @@ stages:
 
 
 build:latest:
+  <<: *job_template
   stage: build
   script:
     # use the ./VERSION file as the version number
