@@ -41,7 +41,7 @@ def main():
 
         # Look at he tracked github version in repo
         my_version = requests.get(package.my_version).text
-        logger.info(f"my_version: {my_version}")
+        logger.info(f"repository_version: {my_version}")
 
         # if pypi version is greater update
         if parse(str(pypi_version)) > parse(str(my_version)):
@@ -85,7 +85,7 @@ def main():
                 os.rmdir(f"/tmp/{package.my_repo}/")
 
         else:
-            logger.info(f"Package '{package.my_repo}' matches upstream '{package.tracked}'")
+            logger.info(f"Container '{package.my_repo}' matches pypi upstream '{package.tracked}'")
 
 
 if __name__ == "__main__":
