@@ -33,16 +33,24 @@ I use this for tracking ansible releases.  On detection this script checks out m
 ```
 
 # Build
-`docker-compose build`
+Username should match the name of the user that created the SSH key.  At this time only users with PDIG=1000 are supported for keys.
+
+Username is set in `./CONTAINER_USER`.  The file is read at build
+
+`docker build --build-arg CONTAINER_USER=<username> <container-name> .`
 
 # Run
 `docker-compose up`
+
+or
+
+`docker pull johnsondnz/pypi-monitor:latest && docker run --rm -v ~/.ssh:/home/generic/.ssh johnsondnz/pypi-monitor:latest >> ~/pypi-monitor/log.log 2>&1`
 
 # Scheduling
 I use a cron task for checking ansible upstream daily.
 ```
 # Check for upstream repo releases every day at midnight
-0 0 * * * /usr/local/bin/docker-compose -f ~/pypi-monitor/docker-compose.yml up >> ~/pypi-app/log.log 2>&1
+0 0 * * * docker pull johnsondnz/pypi-monitor:latest && docker run --rm -v ~/.ssh:/home/generic/.ssh johnsondnz/pypi-monitor:latest >> ~/pypi-monitor/log.log 2>&1
 ```
 
 # SSH Keys
