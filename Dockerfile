@@ -1,6 +1,7 @@
 FROM alpine:latest
 
-LABEL maintainer="Donald Johnson <@johnsonnz>"
+LABEL maintainer="Donald Johnson <@johnsondnz>"
+ARG CONTAINER_USER
 
 COPY app /app
 
@@ -25,12 +26,12 @@ RUN set -x && \
     \
     echo "==> Installed python modules..." && \
     pip3 list && \
-    echo "==> Setup generic user" && \
-    addgroup -g 1000 -S generic && \
-    adduser -u 1000 -S generic -G generic && \
-    chown -R generic:generic $INSTALL_PATH
+    echo "==> Setup ${CONTAINER_USER} user" && \
+    addgroup -g 1000 -S ${CONTAINER_USER} && \
+    adduser -u 1000 -S ${CONTAINER_USER} -G ${CONTAINER_USER} && \
+    chown -R ${CONTAINER_USER}:${CONTAINER_USER} $INSTALL_PATH
 
-USER generic
+USER ${CONTAINER_USER}
 COPY VERSION /VERSION
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

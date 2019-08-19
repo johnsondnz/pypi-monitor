@@ -42,6 +42,7 @@ build:latest:
   script:
     # use the ./VERSION file as the version number
     - export VERSION=$(cat VERSION)
+    - export CONTAINER_USER=$(cat CONTAINER_USER)
 
     # fetches the latest image (not failing if image is not found)
     - docker pull $CI_REGISTRY_IMAGE:latest || true
@@ -55,6 +56,7 @@ build:latest:
       --pull
       --build-arg VCS_REF=$CI_COMMIT_SHA
       --build-arg VCS_URL=$CI_PROJECT_URL
+      --build-arg CONTAINER_USER=$CONTAINER_USER
       --cache-from $CI_REGISTRY_IMAGE:latest
       --tag $CI_REGISTRY_IMAGE:$VERSION
       .
