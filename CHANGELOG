@@ -1,0 +1,12 @@
+[33mbefb8ca[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m update docs
+[33mc93233a[m cleanup on logging messages
+[33m5588b05[m fixed script arguments errors
+[33m538f419[m introduced CONTAINER_USER for build
+[33m7a2afa0[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Update .gitlab-ci.yml
+[33m6ab1b02[m make entrypoint executable
+[33m06d9ca8[m add a better test phase and container entrypoint
+[33mfe42d0b[m Update .gitlab-ci.yml
+[33mb147caf[m Add check for monitored files before running CI/CD
+[33m4cbfb6c[m Update README.md
+[33md828ed8[m add CI/CD pipeline, README.md, LICENSE
+[33m780caf1[m inital push
