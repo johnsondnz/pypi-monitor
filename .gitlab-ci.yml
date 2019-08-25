@@ -20,6 +20,7 @@ before_script:
   
 
 stages:
+  - preflight
   - build
   - test
   - push
@@ -34,6 +35,14 @@ stages:
       - requirements.txt
       - "app/*"
       - .gitlab-ci.yml
+
+
+dockerfile:lint:
+  <<: *job_template
+  stage: preflight
+  image: hadolint/hadolint:latest-debian
+  script:
+    - hadolint Dockerfile
 
 
 build:latest:
