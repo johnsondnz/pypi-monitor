@@ -67,12 +67,12 @@ def main():
                 index.add(["VERSION"])
 
                 # Update CHANGELOG
-                logger.info("Updating CHANGELOG")
-                os.system(f"git log --oneline --decorate --color > /tmp/{package.my_repo}/CHANGELOG")
+                # logger.info("Updating CHANGELOG")
+                # os.system(f"git log --oneline --decorate --color > /tmp/{package.my_repo}/CHANGELOG")
 
                 # Add the new CHANGELOG file
-                logger.info("Adding CHANGELOG to commit")
-                index.add(["CHANGELOG"])
+                # logger.info("Adding CHANGELOG to commit")
+                # index.add(["CHANGELOG"])
 
                 # Commit the change
                 logger.info(f"Writing to commit log: {pypi_version}")
