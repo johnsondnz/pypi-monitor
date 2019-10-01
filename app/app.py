@@ -71,7 +71,7 @@ def main():
                 os.system(f"git log --oneline --decorate --color > /tmp/{package.my_repo}/CHANGELOG")
 
                 # Add the new CHANGELOG file
-                logging.info("Adding CHANGELOG to commit")
+                logger.info("Adding CHANGELOG to commit")
                 index.add(["CHANGELOG"])
 
                 # Commit the change
