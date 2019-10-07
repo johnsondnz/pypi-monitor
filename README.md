@@ -33,7 +33,7 @@ Username should match the name of the user that created the SSH key.  At this ti
 
 Username is set in `./CONTAINER_USER`.  The file is read at build
 
-`docker build --build-arg CONTAINER_USER=<username> <container-name> .`
+`docker build --build-arg CONTAINER_USER=<username> -t <image-name> .`
 
 # Run
 `docker-compose up`
