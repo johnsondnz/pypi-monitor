@@ -12,7 +12,7 @@ from packaging.version import parse
 base_url = "https://pypi.python.org/pypi/{package}/json"
 
 # open and load the database
-with open("database.json", "r") as json_file:
+with open(os.path.join(os.path.dirname(__file__), "database.json"), "r") as json_file:
     database = json.load(json_file)
 
 
@@ -36,11 +36,12 @@ def main():
     # loop through the database
     for package in database:
         package = Box(package)
-        pypi_version = get_version(package.tracked)
+        repository = Box(package.repository)
+        pypi_version = get_version(package.pypi_tracked)
         logger.info(f"pypi version: {pypi_version}")
 
         # Look at he tracked github version in repo
-        my_version = requests.get(package.my_version).text
+        my_version = requests.get(repository.version_file).text
         logger.info(f"repository_version: {my_version}")
 
         # if pypi version is greater update
@@ -49,7 +50,7 @@ def main():
             logger.info("Newer upstream version found")
 
             # trigger the git clone
-            logger.info(f"Cloning {package.my_repo} to /tmp/{package.my_repo}/")
+            logger.info(f"Cloning {repository.owner_user}/{repository.repo_name} to /tmp/{repository.repo_name}/")
             clone_dir = os.path.abspath(os.path.join("/tmp/", package.my_repo))
             repo = Repo.clone_from(package.github_url, clone_dir)
             index = repo.index
@@ -59,7 +60,7 @@ def main():
 
                 # Write the new version to the cloned repo
                 logger.info(f"Writing version '{pypi_version}' to VERSION file")
-                with open(f"/tmp/{package.my_repo}/VERSION", "w") as VERSION:
+                with open(f"/tmp/{repository.repo_name}/VERSION", "w") as VERSION:
                     VERSION.write(str(pypi_version))
 
                 # Add the new VERSION file
@@ -79,21 +80,21 @@ def main():
                 index.commit(str(pypi_version))
 
                 # Push the update to the repo
-                logger.info(f"Pushing updated to {package.github_url}")
+                logger.info(f"Pushing updated to {repository.scm_base_url}/{repository.owner_user}/{repository.repo_name}")
                 origin.push()
 
                 # Remove the cloned repo
-                logger.info(f"rm -rf /tmp/{package.my_repo}/")
-                os.rmdir(f"/tmp/{package.my_repo}/")
+                logger.info(f"rm -rf /tmp/{repository.repo_name}/")
+                os.rmdir(f"/tmp/{repository.repo_name}/")
 
-            except:
+            except Exception:
 
                 # Remove the cloned repo
-                logger.info(f"rm -rf /tmp/{package.my_repo}/")
-                os.rmdir(f"/tmp/{package.my_repo}/")
+                logger.info(f"rm -rf /tmp/{repository.repo_name}/")
+                os.rmdir(f"/tmp/{repository.repo_name}/")
 
         else:
-            logger.info(f"Container '{package.my_repo}' matches pypi upstream '{package.tracked}'")
+            logger.info(f"Container '{repository.repo_name}' matches pypi upstream '{package.pypi_tracked}'")
 
 
 if __name__ == "__main__":
