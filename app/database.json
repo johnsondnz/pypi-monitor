@@ -1,8 +1,12 @@
 [
 	{
-		"tracked": "ansible",
-		"my_repo": "container-ansible",
-		"my_version": "https://gitlab.com/johnsondnz/container-ansible/raw/master/VERSION",
-		"github_url": "git@gitlab.com:johnsondnz/container-ansible.git"
+		"pypi_tracked": "ansible",
+		"repository": {
+			"scm_base_url": "https://www.gitlab.com",
+			"owner_user": "johnsondnz",
+			"repo_name": "container-ansible",
+			"ssh_checkout": "git@gitlab.com:johnsondnz/container-ansible.git",
+			"version_file": "https://gitlab.com/johnsondnz/container-ansible/raw/master/VERSION"
+		}
 	}
 ]

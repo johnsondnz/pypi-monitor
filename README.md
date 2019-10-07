@@ -12,23 +12,19 @@ I use this for tracking ansible releases.  On detection this script checks out m
 ## Database
 `app/database.json`
 
-## Options
-- tracked: Package name being tracked on pypi
-  - example 1: ansible
-  - example 2: django
-- my_repo: Personal repository name from github/gitlab
-- my_version: Raw link to repository VERSION file
-- github_url: URL to repository, supports any git based repository
-
 ## Example database.json
 ```
 [
-	{
-		"tracked": "ansible",
-		"my_repo": "container-ansible",
-		"my_version": "https://gitlab.com/johnsondnz/container-ansible/raw/master/VERSION",
-		"github_url": "git@gitlab.com:johnsondnz/container-ansible.git"
-	}
+        {
+                "pypi_tracked": "ansible",      
+                "repository": {
+                        "scm_base_url": "https://www.gitlab.com",
+                        "owner_user": "johnsondnz",     
+                        "repo_name": "container-ansible",
+                        "ssh_checkout": "git@gitlab.com:johnsondnz/container-ansible.git",
+                        "version_file": "https://gitlab.com/johnsondnz/container-ansible/raw/master/VERSION"
+                }              
+        }
 ]
 ```
 

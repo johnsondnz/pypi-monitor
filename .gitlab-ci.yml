@@ -17,11 +17,12 @@ services:
 before_script:
   - docker info
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  
+
 
 stages:
+  - tests
   - build
-  - test
+  - test_image
   - push
 
 
@@ -36,9 +37,30 @@ stages:
       - .gitlab-ci.yml
 
 
+tests:unittests:
+  image: python:3-alpine
+  stage: tests
+  only:
+    - merge_requests
+  before_script:
+    - pip install -r app/requirements.txt
+    - pip install unittest-xml-reporting
+    - pip install xmlrunner
+    - apk add --no-cache git
+  script:
+    - python -m xmlrunner discover -s tests --output-file report.xml -v
+  artifacts:
+    paths:
+      - report.xml
+    reports:
+      junit: report.xml
+
+    
 build:latest:
   <<: *job_template
   stage: build
+  only:
+    - merge_requests
   script:
     # use the ./VERSION file as the version number
     - export VERSION=$(cat VERSION)
@@ -65,7 +87,9 @@ build:latest:
 
 test:latest:
   <<: *job_template
-  stage: test
+  stage: test_image
+  only:
+    - merge_requests
   script:
     # use the ./VERSION file as the version number
     - export VERSION=$(cat VERSION)
