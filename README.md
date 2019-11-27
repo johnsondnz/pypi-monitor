@@ -4,7 +4,7 @@
 Monitors configured repositorys for changes in versions.
 
 ## Uses
-I use this for tracking ansible releases.  On detection this script checks out my container-ansible repository.  Updates the VERSION file to the new ansible release version and commits the change.  A CI/CD on the container-ansible repository then builds the new container and publishes it to dockerhub/
+I use this for tracking ansible releases.  On detection this script checks out my container-ansible repository.  Updates the VERSION file to the new ansible release version and commits the change.  A CI/CD on the container-ansible repository then builds the new container and publishes it to dockerhub.
 
 - [container-ansible](https://gitlab.com/johnsondnz/container-ansible)
 - [docker-hub](https://hub.docker.com/r/johnsondnz/ansible)
